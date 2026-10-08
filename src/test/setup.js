@@ -4,7 +4,7 @@ import { cleanup } from '@testing-library/react'
 
 afterEach(() => cleanup())
 
-// jsdom no implementa estas APIs que la landing puede usar.
+// jsdom no implementa estas APIs que el sitio puede usar.
 class IntersectionObserverStub {
   observe() {}
   unobserve() {}

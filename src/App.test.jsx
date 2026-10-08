@@ -9,7 +9,7 @@ const indexHtml = leer('index.html')
 const fuente = leer('src/App.jsx')
 const dominioVercel = `https://${JSON.parse(leer('vercel.json')).name}.vercel.app/`
 
-describe('landing: integridad del contenido', () => {
+describe('sitio: integridad del contenido', () => {
   it('se renderiza sin errores', () => {
     const { container } = render(<App />)
     expect(container.firstChild).not.toBeNull()
@@ -64,7 +64,7 @@ describe('landing: integridad del contenido', () => {
   })
 })
 
-describe('landing: metadatos para compartir', () => {
+describe('sitio: metadatos para compartir', () => {
   it('tiene título y descripción', () => {
     expect(indexHtml).toMatch(/<title>[^<]{5,}<\/title>/)
     expect(indexHtml).toMatch(/<meta\s+name="description"\s+content="[^"]{20,}"/)

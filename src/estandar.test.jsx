@@ -99,7 +99,7 @@ describe('seguridad y privacidad', () => {
   })
 
   it('no carga nada de terceros: tipografías autoalojadas', () => {
-    const fuentes = ['index.html', 'src/App.css', 'src/index.css', 'src/main.jsx', 'public/pagina.css'].map(leer).join('\n')
+    const fuentes = ['index.html', 'src/index.css', 'src/main.jsx', 'public/pagina.css'].map(leer).join('\n')
     expect(fuentes).not.toMatch(/fonts\.googleapis|fonts\.gstatic/)
     expect(leer('src/main.jsx')).toContain('@fontsource/')
     expect(leer('vite.config.js')).toContain('assetsInlineLimit: 0')
