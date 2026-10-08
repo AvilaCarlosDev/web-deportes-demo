@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { MenuMovil, SaltarAlContenido, WhatsAppFlotante } from './sitio.jsx'
 import { DivisorCancha } from './marcador.jsx'
+import { useCarril, useContador, useFranjas, useRevelar } from './motion.js'
 import { useSeccionActiva, wa } from './navegacion.js'
 
 const enlaces = [
@@ -164,6 +165,12 @@ function App() {
   const [correo, setCorreo] = useState('')
   const [club, setClub] = useState('inicial')
   const activa = useSeccionActiva(enlaces.map(([id]) => id))
+  const refMarcador = useContador()
+  const refCategorias = useRevelar()
+  const refOfertas = useRevelar(110)
+  const refCarril = useRef(null)
+  useFranjas()
+  useCarril(refCarril)
 
   const filteredProducts = useMemo(() => {
     const q = normalizar(busqueda.trim())
@@ -196,7 +203,7 @@ function App() {
     <div className="min-h-screen bg-[#f4f7fb] text-slate-950 antialiased">
       <SaltarAlContenido className="focus:rounded-full focus:bg-cyan-300 focus:text-slate-950" />
       <div className="relative overflow-hidden bg-slate-950">
-        <span className="velocidad en-desfile absolute inset-0 text-cyan-300 opacity-[0.12]" aria-hidden="true" />
+        <span className="velocidad absolute inset-0 text-cyan-300 opacity-[0.12]" aria-hidden="true" />
         <div className="relative mx-auto flex max-w-7xl items-center justify-center gap-x-8 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-white/80 md:justify-between">
           <span className="flex items-center gap-2">
             <span className="latido h-1.5 w-1.5 rounded-full bg-rose-400" aria-hidden="true" />
@@ -276,7 +283,7 @@ function App() {
             className="absolute inset-0 -z-20 h-full w-full object-cover opacity-40"
           />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(100deg,#020617_0%,rgba(2,6,23,.95)_48%,rgba(2,6,23,.45)_100%)]" />
-          <span className="velocidad en-desfile absolute -right-24 top-0 -z-10 h-full w-2/3 text-cyan-300 opacity-[0.08]" aria-hidden="true" />
+          <span className="velocidad absolute -right-24 top-0 -z-10 h-full w-2/3 text-cyan-300 opacity-[0.08]" aria-hidden="true" />
 
           <div className="mx-auto max-w-7xl px-5 pb-20 pt-16 md:pb-24 md:pt-20 lg:px-8">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
@@ -295,18 +302,21 @@ function App() {
             </p>
 
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <a href="#productos" className="corte inline-flex items-center justify-center bg-cyan-300 px-8 py-4 font-display text-lg font-black uppercase tracking-wide text-slate-950 shadow-2xl shadow-cyan-400/20 transition hover:-translate-y-0.5 hover:bg-white">
+              <a href="#productos" className="corte inline-flex items-center justify-center bg-cyan-300 px-8 py-4 font-display text-lg font-black uppercase tracking-wide text-slate-950 shadow-2xl shadow-cyan-400/20 cta hover:bg-white">
                 Ver productos destacados
               </a>
-              <a href={wa('Hola, quiero asesoría para elegir mi equipo.')} className="corte inline-flex items-center justify-center border border-white/25 bg-white/10 px-8 py-4 font-display text-lg font-black uppercase tracking-wide text-white backdrop-blur transition hover:bg-white/15">
+              <a href={wa('Hola, quiero asesoría para elegir mi equipo.')} className="corte inline-flex items-center justify-center border border-white/25 bg-white/10 px-8 py-4 font-display text-lg font-black uppercase tracking-wide text-white backdrop-blur cta hover:bg-white/15">
                 Pedir asesoría por WhatsApp
               </a>
             </div>
 
-            <div className="tabular corte mt-12 grid max-w-4xl grid-cols-2 gap-px border border-white/15 bg-white/15 md:grid-cols-4">
+            <div ref={refMarcador} className="tabular corte mt-12 grid max-w-4xl grid-cols-2 gap-px border border-white/15 bg-white/15 md:grid-cols-4">
               {marcador.map(([valor, etiqueta]) => (
                 <div key={etiqueta} className="bg-slate-950/85 px-5 py-5 backdrop-blur">
-                  <strong className="block font-marcador text-4xl font-bold leading-none text-cyan-300 md:text-5xl">{valor}</strong>
+                  <strong className="block font-marcador text-4xl font-bold leading-none text-cyan-300 md:text-5xl" aria-hidden="true" data-cifra={valor}>
+                    {valor}
+                  </strong>
+                  <span className="sr-only">{valor}</span>
                   <span className="mt-2 block text-[10px] font-bold uppercase tracking-[0.16em] text-white/75">{etiqueta}</span>
                 </div>
               ))}
@@ -315,7 +325,7 @@ function App() {
         </section>
 
         <section aria-label="Producto de la jornada" className="relative isolate overflow-hidden border-y border-cyan-300/25 bg-[#06121c] text-white">
-          <span className="velocidad en-desfile absolute inset-0 text-cyan-300 opacity-[0.07]" aria-hidden="true" />
+          <span className="velocidad absolute inset-0 text-cyan-300 opacity-[0.07]" aria-hidden="true" />
           <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-5 py-12 lg:grid-cols-[minmax(0,20rem)_1fr] lg:px-8">
             <img
               src="/img/foto-15422910267eec.jpg"
@@ -337,10 +347,10 @@ function App() {
                 Confirma talla, disponibilidad y envío con un asesor antes de comprar. Respondemos en minutos.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <a href={wa('Hola, quiero comprar AeroPulse Runner Pro ($89). ¿Qué tallas tienen disponibles?')} className="corte-sm bg-cyan-300 px-6 py-3 font-display text-base font-black uppercase tracking-wide text-slate-950 transition hover:bg-white">
+                <a href={wa('Hola, quiero comprar AeroPulse Runner Pro ($89). ¿Qué tallas tienen disponibles?')} className="corte-sm bg-cyan-300 px-6 py-3 font-display text-base font-black uppercase tracking-wide text-slate-950 cta hover:bg-white">
                   Comprar
                 </a>
-                <a href={wa('Hola, quiero hablar con un asesor.')} className="corte-sm border border-white/30 px-6 py-3 font-display text-base font-black uppercase tracking-wide text-white transition hover:border-cyan-300 hover:text-cyan-300">
+                <a href={wa('Hola, quiero hablar con un asesor.')} className="corte-sm border border-white/30 px-6 py-3 font-display text-base font-black uppercase tracking-wide text-white cta hover:border-cyan-300 hover:text-cyan-300">
                   Hablar con asesor
                 </a>
               </div>
@@ -360,7 +370,7 @@ function App() {
               <p className="max-w-md text-base leading-7 text-slate-600">Running, gimnasio, cancha o tabla: cada línea con lo que de verdad se usa en cada deporte.</p>
             </div>
 
-            <div className="grid gap-5 md:grid-cols-4">
+            <div ref={refCategorias} className="grid gap-5 md:grid-cols-4">
               {categories.map((cat, indice) => (
                 <a
                   key={cat.name}
@@ -371,7 +381,7 @@ function App() {
                   <img src={cat.img} alt={`Categoría ${cat.name}`} className="absolute inset-0 h-full w-full object-cover opacity-80 transition duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-slate-950/40" />
                   <span className="velocidad absolute inset-x-0 top-0 h-16 text-cyan-300 opacity-40" aria-hidden="true" />
-                  <span className="tabular absolute right-5 top-3 font-marcador text-5xl font-bold text-white/30" aria-hidden="true">
+                  <span aria-hidden="true" className="dorsal tabular absolute right-5 top-3 font-marcador text-5xl font-bold text-white/30 transition duration-500 group-hover:-translate-y-2 group-hover:text-cyan-300/80">
                     {String(indice + 1).padStart(2, '0')}
                   </span>
                   <span className="corte-sm absolute left-5 top-5 bg-slate-950/80 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-white/85 backdrop-blur">
@@ -381,11 +391,61 @@ function App() {
                     <p className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-cyan-200">{cat.eyebrow}</p>
                     <div className="flex items-end justify-between gap-5">
                       <h3 className="text-3xl font-black uppercase tracking-tight">{cat.name}</h3>
-                      <span className="corte-sm bg-cyan-300 px-4 py-2 text-xs font-black uppercase text-slate-950 transition group-hover:bg-white">Ver ficha</span>
+                      <span className="corte-sm bg-cyan-300 px-4 py-2 text-xs font-black uppercase text-slate-950 transition duration-300 group-hover:-translate-y-1 group-hover:bg-white">Ver ficha</span>
                     </div>
                   </div>
                 </a>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="titulo-carril" ref={refCarril} className="carril relative bg-slate-950 text-white">
+          <div className="carril-marco">
+            <div className="mx-auto max-w-7xl px-5 pb-2 pt-24 lg:px-8">
+              <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+                <div>
+                  <p className="corte-sm inline-block bg-cyan-300 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-slate-950">Carril de destacados</p>
+                  <h2 id="titulo-carril" className="mt-4 text-5xl font-black uppercase leading-[0.95] sm:text-6xl">Lo que más sale</h2>
+                </div>
+                <p className="max-w-md text-base leading-7 text-white/70">
+                  Ocho modelos que se mueven esta semana: recórrelos de un vistazo y en el teléfono deslízalos con el dedo.
+                </p>
+              </div>
+            </div>
+            <div className="carril-ventana mt-6">
+              <ul className="carril-pista">
+                {products.map((product, indice) => (
+                  <li key={product.name} className="carril-item corte group relative overflow-hidden border border-white/15 bg-white/[0.06]">
+                    <div className="relative aspect-[5/4] overflow-hidden bg-slate-900">
+                      <img src={product.img} alt={product.name} className="h-full w-full object-cover opacity-85 transition duration-700 group-hover:scale-105" />
+                      <span className="velocidad absolute inset-x-0 bottom-0 h-14 text-cyan-300 opacity-45" aria-hidden="true" />
+                      <span aria-hidden="true" className="dorsal tabular absolute bottom-0 right-3 font-marcador text-[4.5rem] font-bold leading-[0.8] text-white/40 [text-shadow:0_2px_12px_rgba(2,6,23,0.65)] transition duration-500 group-hover:-translate-y-3 group-hover:text-cyan-300">
+                        {String(indice + 1).padStart(2, '0')}
+                      </span>
+                      {product.tag && (
+                        <span className={`corte-sm absolute left-4 top-4 px-3 py-1.5 text-xs font-black ${product.tag.includes('%') ? 'bg-amber-300 text-slate-950' : 'bg-cyan-300 text-slate-950'}`}>
+                          {product.tag}
+                        </span>
+                      )}
+                    </div>
+                    <div className="p-5">
+                      <p className="text-[11px] font-black uppercase tracking-[0.2em] text-cyan-200">{product.category}</p>
+                      <h3 className="mt-1 text-xl font-extrabold uppercase leading-6 text-white">{product.name}</h3>
+                      <div className="mt-4 flex items-center justify-between gap-4">
+                        <p className="tabular font-marcador text-2xl font-bold text-cyan-300">${product.price}</p>
+                        <a
+                          href={wa(`Hola, quiero comprar ${product.name} ($${product.price}). ¿Qué tallas tienen disponibles?`)}
+                          aria-label={`Comprar ${product.name}`}
+                          className="cta corte-sm shrink-0 bg-cyan-300 px-4 py-2 text-sm font-black text-slate-950 hover:bg-white"
+                        >
+                          Comprar
+                        </a>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>
@@ -404,7 +464,7 @@ function App() {
                   </p>
                 )}
               </div>
-              <a href={wa('Hola, ¿me pueden enviar el catálogo completo?')} className="corte-sm inline-flex w-fit bg-slate-950 px-6 py-3 font-display text-base font-black uppercase tracking-wide text-white transition hover:bg-cyan-500 hover:text-slate-950">
+              <a href={wa('Hola, ¿me pueden enviar el catálogo completo?')} className="corte-sm inline-flex w-fit bg-slate-950 px-6 py-3 font-display text-base font-black uppercase tracking-wide text-white cta hover:bg-cyan-500 hover:text-slate-950">
                 Pedir catálogo completo
               </a>
             </div>
@@ -441,10 +501,13 @@ function App() {
               </div>
             )}
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {filteredProducts.map((product) => (
+              {filteredProducts.map((product, indice) => (
                 <article key={product.name} className="corte group flex flex-col overflow-hidden border border-slate-300 bg-white transition hover:-translate-y-1 hover:border-cyan-600 hover:shadow-2xl hover:shadow-slate-950/15">
                   <div className="relative aspect-square overflow-hidden bg-slate-100">
                     <img src={product.img} alt={product.name} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                    <span aria-hidden="true" className="dorsal tabular absolute bottom-0 right-4 font-marcador text-[5rem] font-bold leading-[0.8] text-white/40 [text-shadow:0_2px_12px_rgba(2,6,23,0.65)] transition duration-500 group-hover:-translate-y-3 group-hover:text-cyan-300">
+                      {String(indice + 1).padStart(2, '0')}
+                    </span>
                     <span className="velocidad absolute inset-x-0 bottom-0 h-12 text-slate-950 opacity-0 transition group-hover:opacity-20" aria-hidden="true" />
                     {product.tag && (
                       <span className={`corte-sm absolute left-4 top-4 px-3 py-1.5 text-xs font-black ${product.tag.includes('%') ? 'bg-amber-300 text-slate-950' : 'bg-cyan-300 text-slate-950'}`}>
@@ -472,7 +535,7 @@ function App() {
                         <span className="text-3xl font-bold">${product.price}</span>
                         {product.oldPrice && <span className="ml-2 text-sm font-semibold text-slate-500 line-through">${product.oldPrice}</span>}
                       </div>
-                      <a href={wa(`Hola, quiero comprar ${product.name} ($${product.price}). ¿Qué tallas tienen disponibles?`)} aria-label={`Comprar ${product.name}`} className="corte-sm bg-cyan-300 px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-slate-950 hover:text-white active:scale-95">
+                      <a href={wa(`Hola, quiero comprar ${product.name} ($${product.price}). ¿Qué tallas tienen disponibles?`)} aria-label={`Comprar ${product.name}`} className="cta corte-sm bg-cyan-300 px-4 py-2 text-sm font-black text-slate-950 hover:bg-slate-950 hover:text-white">
                         Comprar
                       </a>
                     </div>
@@ -484,7 +547,7 @@ function App() {
         </section>
 
         <section aria-label="Garantías" className="relative isolate overflow-hidden bg-slate-950 text-white">
-          <span className="velocidad en-desfile absolute inset-0 text-cyan-300 opacity-[0.08]" aria-hidden="true" />
+          <span className="velocidad absolute inset-0 text-cyan-300 opacity-[0.08]" aria-hidden="true" />
           <div className="relative mx-auto grid max-w-7xl gap-4 px-5 py-20 md:grid-cols-3 lg:px-8">
             {benefits.map((benefit, indice) => (
               <div key={benefit.title} className="corte border border-white/15 bg-slate-950/70 p-7 backdrop-blur transition hover:border-cyan-300/60">
@@ -508,7 +571,7 @@ function App() {
               <p className="mt-5 text-lg leading-8 text-slate-600">Dile el código al asesor por WhatsApp y te lo aplica al confirmar tu compra.</p>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-3">
+            <div ref={refOfertas} className="grid gap-6 md:grid-cols-3">
               {promos.map((promo) => (
                 <article key={promo.code} className="corte relative overflow-hidden bg-slate-950 text-white shadow-2xl shadow-slate-950/20">
                   <div className={`absolute -right-12 -top-12 h-44 w-44 rounded-full bg-gradient-to-br ${promo.accent} blur-2xl`} aria-hidden="true" />
@@ -535,7 +598,7 @@ function App() {
                   </div>
                   <p className="relative mt-4 min-h-14 px-5 text-base leading-7 text-white/80">{promo.desc}</p>
                   <div className="relative mt-4 pb-6 px-5">
-                    <a href={wa(`Hola, quiero usar el cupón ${promo.code}.`)} className="corte-sm inline-flex bg-cyan-300 px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-white">
+                    <a href={wa(`Hola, quiero usar el cupón ${promo.code}.`)} className="cta corte-sm inline-flex bg-cyan-300 px-5 py-3 text-sm font-black text-slate-950 hover:bg-white">
                       Usar cupón
                     </a>
                   </div>
@@ -578,7 +641,7 @@ function App() {
                       autoComplete="email"
                       className={`min-h-14 flex-1 border bg-white/10 px-6 text-white outline-none placeholder:text-white/70 focus:border-cyan-200 ${club === 'error' ? 'border-orange-300' : 'border-white/25'}`}
                     />
-                    <button className="corte-sm min-h-14 bg-cyan-300 px-8 font-display text-base font-black uppercase tracking-wide text-slate-950 transition hover:bg-white active:scale-[.98]">Unirme</button>
+                    <button className="cta corte-sm min-h-14 bg-cyan-300 px-8 font-display text-base font-black uppercase tracking-wide text-slate-950 hover:bg-white">Unirme</button>
                   </div>
                   <p id="club-error" className="mt-3 min-h-5 pl-6 text-sm font-semibold text-orange-200">{club === 'error' ? 'Revisa el correo: debe tener la forma nombre@dominio.com.' : ''}</p>
                 </form>
@@ -588,7 +651,7 @@ function App() {
               <img src="/img/foto-15186110121186.jpg" alt="Persona entrenando con ropa deportiva" className="absolute inset-0 h-full w-full object-cover opacity-70" />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 to-transparent" />
               <span className="velocidad absolute inset-x-0 bottom-0 h-24 text-cyan-300 opacity-25" aria-hidden="true" />
-              <a href={wa(mensajeGuardados)} className="corte-sm absolute bottom-8 left-8 right-8 bg-cyan-300 px-6 py-4 text-center font-display text-lg font-black uppercase tracking-wide text-slate-950 transition hover:bg-white">
+              <a href={wa(mensajeGuardados)} className="cta corte-sm absolute bottom-8 left-8 right-8 bg-cyan-300 px-6 py-4 text-center font-display text-lg font-black uppercase tracking-wide text-slate-950 hover:bg-white">
                 Comprar por WhatsApp
               </a>
             </div>
