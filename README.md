@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/AvilaCarlosDev/web-deportes-demo/actions/workflows/ci.yml/badge.svg)](https://github.com/AvilaCarlosDev/web-deportes-demo/actions/workflows/ci.yml) [![Licencia: MIT](https://img.shields.io/badge/licencia-MIT-green.svg)](LICENSE) [![Demo en vivo](https://img.shields.io/badge/demo%20en%20vivo-Vercel-000?logo=vercel)](https://agencia-web-deportes-demo.vercel.app)
 
-<a href="https://agencia-web-deportes-demo.vercel.app"><img src="docs/portada.jpg" alt="SportZone en la computadora y en el teléfono: portada con productos, ofertas y compra por WhatsApp" width="100%"></a>
+<a href="https://agencia-web-deportes-demo.vercel.app"><img src="docs/portada.jpg" alt="SportZone Pro: portada con buscador, productos destacados y cifras de la tienda" width="100%"></a>
 
 Sitio web de demostración, de una sola página: tienda deportiva con categorías, catálogo filtrable, ofertas y asesoría por WhatsApp.
 
