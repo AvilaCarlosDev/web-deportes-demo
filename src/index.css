@@ -125,6 +125,43 @@ p {
   transform: none;
 }
 
+.mapa-mascara {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
+}
+
+.mapa-activo .mapa-mascara {
+  stroke-dashoffset: 0;
+}
+
+.mapa-etiqueta {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s ease 0.8s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.8s;
+}
+
+.mapa-activo .mapa-etiqueta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mapa-pin {
+  opacity: 0;
+  transition: opacity 0.35s ease 0.7s;
+}
+
+.mapa-activo .mapa-pin {
+  opacity: 1;
+  animation: mapa-bote 2s ease-in-out 1s infinite;
+}
+
+.mapa-instante .mapa-mascara,
+.mapa-instante .mapa-etiqueta,
+.mapa-instante .mapa-pin {
+  transition: none;
+}
+
 .cta {
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
@@ -199,6 +236,11 @@ p {
 
   .latido {
     animation: latido 1.7s ease-in-out infinite;
+  }
+
+  @keyframes mapa-bote {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
 }
 

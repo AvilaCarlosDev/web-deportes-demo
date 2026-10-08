@@ -1,18 +1,21 @@
 import { useMemo, useRef, useState } from 'react'
 import { MenuMovil, SaltarAlContenido, WhatsAppFlotante } from './sitio.jsx'
 import { DivisorCancha } from './marcador.jsx'
+import { DatosSede, MapaSede } from './mapa.jsx'
 import { useCarril, useContador, useFranjas, useRevelar } from './motion.js'
-import { useSeccionActiva, wa } from './navegacion.js'
+import { useAnclaInicial, useSeccionActiva, wa } from './navegacion.js'
 
 const enlaces = [
   ['categorias', 'Categorías'],
   ['productos', 'Productos'],
   ['ofertas', 'Ofertas'],
   ['club', 'Club'],
+  ['ubicacion', 'Ubicación'],
 ]
 
 const normalizar = (texto) => texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
 const CORREO = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+const MAPA_URL = 'https://www.google.com/maps/search/?api=1&query=Punto+Fijo+Falcón+Venezuela'
 
 const filters = ['Todos', 'Running', 'Training', 'Fútbol', 'Basket', 'Accesorios']
 
@@ -165,9 +168,11 @@ function App() {
   const [correo, setCorreo] = useState('')
   const [club, setClub] = useState('inicial')
   const activa = useSeccionActiva(enlaces.map(([id]) => id))
+  useAnclaInicial()
   const refMarcador = useContador()
   const refCategorias = useRevelar()
   const refOfertas = useRevelar(110)
+  const refUbicacion = useRevelar()
   const refCarril = useRef(null)
   useFranjas()
   useCarril(refCarril)
@@ -657,6 +662,48 @@ function App() {
             </div>
           </div>
         </section>
+
+        <section id="ubicacion" aria-labelledby="titulo-ubicacion" className="relative overflow-hidden bg-white py-24">
+          <span className="velocidad absolute inset-x-0 top-0 h-20 text-slate-950 opacity-[0.05]" aria-hidden="true" />
+          <div ref={refUbicacion} className="relative mx-auto max-w-7xl px-5 lg:px-8">
+            <div className="mb-12 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+              <div>
+                <p className="corte-sm inline-block bg-slate-950 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-cyan-300">Dónde estamos</p>
+                <h2 id="titulo-ubicacion" className="mt-4 max-w-3xl text-5xl font-black uppercase leading-[0.95] sm:text-6xl">Te esperamos en Punto Fijo</h2>
+              </div>
+              <p className="max-w-md text-base leading-7 text-slate-600">
+                Pasa por la sede o coordina por WhatsApp antes de venir: confirmamos talla y disponibilidad en minutos.
+              </p>
+            </div>
+
+            <div className="grid gap-7 lg:grid-cols-2 lg:items-start">
+              <div className="corte border border-slate-200 bg-slate-50 p-7 sm:p-9">
+                <p className="tabular font-marcador text-xs font-bold uppercase tracking-[0.2em] text-cyan-700">SEDE 01</p>
+                <h3 className="mt-4 text-3xl font-black uppercase leading-8 tracking-tight text-slate-950 sm:text-4xl">Punto Fijo, Falcón</h3>
+                <p className="mt-2 text-base leading-7 text-slate-600">Estado Falcón, Venezuela. Sede principal de SportZone Pro.</p>
+                <DatosSede />
+                <div className="mt-7 flex flex-wrap gap-3">
+                  <a
+                    href={MAPA_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cta corte-sm inline-flex items-center bg-slate-950 px-6 py-4 font-display text-base font-black uppercase tracking-wide text-cyan-300 transition hover:bg-cyan-300 hover:text-slate-950"
+                  >
+                    Cómo llegar
+                  </a>
+                  <a
+                    href={wa('Hola, quiero consultar la sede de Punto Fijo.')}
+                    className="cta corte-sm inline-flex items-center border border-slate-300 bg-white px-6 py-4 font-display text-base font-black uppercase tracking-wide text-slate-950 transition hover:border-slate-950 hover:bg-slate-950 hover:text-white"
+                  >
+                    Escribir por WhatsApp
+                  </a>
+                </div>
+              </div>
+
+              <MapaSede />
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer className="border-t border-cyan-300/30 bg-slate-950 py-14 text-white">
@@ -683,7 +730,7 @@ function App() {
           <div>
             <h3 className="text-sm font-black uppercase tracking-[0.18em] text-cyan-300">Contacto</h3>
             <ul className="mt-5 space-y-3 text-sm font-semibold text-white/75">
-              <li>Punto Fijo, Falcón</li>
+              <li><a href="#ubicacion" className="transition hover:text-cyan-300">Punto Fijo, Falcón</a></li>
               <li><a href={wa()} className="transition hover:text-cyan-300">WhatsApp: +58 412-000-0000</a></li>
               <li>Atención: 9:00 AM - 7:00 PM</li>
             </ul>

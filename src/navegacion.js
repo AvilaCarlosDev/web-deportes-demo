@@ -28,3 +28,16 @@ export function useSeccionActiva(ids) {
 
   return activa
 }
+
+export function useAnclaInicial() {
+  useEffect(() => {
+    const ancla = window.location.hash.slice(1)
+    if (!ancla) return undefined
+    let cuadro = requestAnimationFrame(() => {
+      cuadro = requestAnimationFrame(() => {
+        document.getElementById(ancla)?.scrollIntoView({ behavior: 'instant', block: 'start' })
+      })
+    })
+    return () => cancelAnimationFrame(cuadro)
+  }, [])
+}
