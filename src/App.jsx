@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { MenuMovil, SaltarAlContenido, WhatsAppFlotante } from './sitio.jsx'
+import { DivisorCancha } from './marcador.jsx'
 import { useSeccionActiva, wa } from './navegacion.js'
 
 const enlaces = [
@@ -119,10 +120,41 @@ const benefits = [
   { value: '30d', title: 'Cambio de talla', desc: 'Cambios simples si necesitas ajustar modelo o talla.' },
 ]
 
+const marcador = [
+  ['500', 'productos en catálogo'],
+  ['024', 'horas de despacho'],
+  ['4.9', 'valoración media'],
+  ['30d', 'cambio de talla'],
+]
+
 const promos = [
-  { code: 'RUN20', title: 'Running drop', desc: '20% OFF en calzado seleccionado', accent: 'from-sky-400 to-cyan-300' },
-  { code: 'GYM40', title: 'Gym week', desc: 'Hasta 40% OFF en ropa técnica', accent: 'from-orange-400 to-amber-300' },
-  { code: 'PACK2X1', title: 'Accesorios', desc: 'Combos 2x1 para entrenar diario', accent: 'from-lime-300 to-cyan-300' },
+  {
+    code: 'RUN20',
+    title: 'Running drop',
+    desc: '20% OFF en calzado seleccionado',
+    minuto: "20'",
+    score: ['20', '0'],
+    unidad: '% de descuento',
+    accent: 'from-sky-400/30 to-cyan-300/20',
+  },
+  {
+    code: 'GYM40',
+    title: 'Gym week',
+    desc: 'Hasta 40% OFF en ropa técnica',
+    minuto: "40'",
+    score: ['40', '0'],
+    unidad: '% de descuento',
+    accent: 'from-orange-400/30 to-amber-300/20',
+  },
+  {
+    code: 'PACK2X1',
+    title: 'Accesorios',
+    desc: 'Combos 2x1 para entrenar diario',
+    minuto: "60'",
+    score: ['2', '1'],
+    unidad: '2x1 en accesorios',
+    accent: 'from-lime-300/30 to-cyan-300/20',
+  },
 ]
 
 function App() {
@@ -162,47 +194,51 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#f4f7fb] text-slate-950 antialiased">
-      <SaltarAlContenido className="focus:rounded-full focus:bg-slate-950 focus:text-white" />
-      <div className="bg-slate-950 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70">
-        <div className="mx-auto flex max-w-7xl items-center justify-center gap-x-8 px-5 py-2.5 md:justify-between">
-          <span>Envíos a toda Venezuela</span>
+      <SaltarAlContenido className="focus:rounded-full focus:bg-cyan-300 focus:text-slate-950" />
+      <div className="relative overflow-hidden bg-slate-950">
+        <span className="velocidad en-desfile absolute inset-0 text-cyan-300 opacity-[0.12]" aria-hidden="true" />
+        <div className="relative mx-auto flex max-w-7xl items-center justify-center gap-x-8 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-white/80 md:justify-between">
+          <span className="flex items-center gap-2">
+            <span className="latido h-1.5 w-1.5 rounded-full bg-rose-400" aria-hidden="true" />
+            En vivo · Envíos a toda Venezuela
+          </span>
           <span className="hidden md:inline">Compra asistida por WhatsApp</span>
           <span className="hidden md:inline">Cambios simples por talla</span>
         </div>
       </div>
 
-      <header className="sticky top-0 z-50 border-b border-white/70 bg-white/85 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-cyan-300/30 bg-slate-950/95 backdrop-blur-xl">
         <div className="mx-auto flex h-20 max-w-7xl items-center gap-4 px-5 lg:px-8">
-          <a href="#inicio" className="flex shrink-0 items-center gap-3" aria-label="SportZone Pro inicio">
-            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-slate-950 text-lg font-black text-cyan-300 shadow-xl shadow-slate-950/10">SZ</span>
+          <a href="#inicio" className="corte-sm flex shrink-0 items-center gap-3 bg-white/10 py-2 pl-2 pr-4" aria-label="SportZone Pro inicio">
+            <span className="grid h-10 w-10 place-items-center bg-cyan-300 font-marcador text-lg font-bold text-slate-950">SZ</span>
             <span>
-              <span className="block text-lg font-black tracking-tight">SportZone Pro</span>
-              <span className="block text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Performance Store</span>
+              <span className="block text-lg font-black uppercase leading-none tracking-tight text-white">SportZone Pro</span>
+              <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.22em] text-white/70">Performance store</span>
             </span>
           </a>
 
-          <form role="search" onSubmit={buscar} className="hidden flex-1 items-center rounded-full border border-slate-200 bg-slate-50 px-4 py-1.5 transition focus-within:border-cyan-400 focus-within:bg-white lg:flex">
-            <span aria-hidden="true" className="text-slate-400">⌕</span>
+          <form role="search" onSubmit={buscar} className="hidden flex-1 items-center border border-white/20 bg-white/10 px-3 py-1.5 transition focus-within:border-cyan-300 focus-within:bg-white/15 lg:flex">
+            <span aria-hidden="true" className="text-white/70">⌕</span>
             <input
               type="search"
               value={busqueda}
               onChange={(event) => setBusqueda(event.target.value)}
               aria-label="Buscar productos"
               placeholder="Buscar zapatos, ropa, accesorios..."
-              className="w-full bg-transparent px-3 py-1 text-sm font-semibold text-slate-700 outline-none placeholder:text-slate-400"
+              className="w-full bg-transparent px-3 py-1.5 text-sm font-semibold text-white outline-none placeholder:text-white/70"
             />
-            <button className="rounded-full bg-slate-950 px-5 py-2 text-xs font-black uppercase tracking-wide text-white transition hover:bg-cyan-500 hover:text-slate-950 active:scale-95">
+            <button className="corte-sm bg-cyan-300 px-5 py-2 text-xs font-black uppercase tracking-wide text-slate-950 transition hover:bg-white active:scale-95">
               Buscar
             </button>
           </form>
 
-          <nav aria-label="Principal" className="hidden items-center gap-5 text-sm font-black text-slate-600 lg:flex">
+          <nav aria-label="Principal" className="hidden items-center gap-6 font-display text-sm font-black uppercase tracking-[0.1em] lg:flex">
             {enlaces.map(([id, texto]) => (
               <a
                 key={id}
                 href={`#${id}`}
                 aria-current={activa === id ? 'true' : undefined}
-                className={`relative py-1 transition hover:text-cyan-600 ${activa === id ? 'text-slate-950 after:absolute after:inset-x-0 after:-bottom-1 after:h-0.5 after:rounded-full after:bg-cyan-400' : ''}`}
+                className={`relative py-2 transition after:absolute after:inset-x-0 after:-bottom-0.5 after:h-1 after:-skew-x-12 after:bg-cyan-300 after:transition-transform ${activa === id ? 'text-cyan-300 after:scale-x-100' : 'text-white/75 after:scale-x-0 hover:text-white'}`}
               >
                 {texto}
               </a>
@@ -210,22 +246,22 @@ function App() {
           </nav>
 
           <div className="ml-auto flex items-center gap-2 lg:ml-0">
-            <a href={wa('Hola, quiero asesoría para elegir mi equipo.')} className="hidden rounded-full border border-slate-200 px-4 py-2 text-sm font-black text-slate-800 transition hover:border-cyan-400 hover:text-cyan-700 xl:inline-flex">
+            <a href={wa('Hola, quiero asesoría para elegir mi equipo.')} className="corte-sm hidden border border-white/25 px-4 py-2 font-display text-sm font-black uppercase tracking-wide text-white transition hover:border-cyan-300 hover:text-cyan-300 xl:inline-flex">
               WhatsApp
             </a>
-            <a href={guardados.length ? wa(mensajeGuardados) : '#productos'} className="relative grid h-11 w-11 shrink-0 place-items-center rounded-full bg-slate-950 text-white transition hover:bg-cyan-500 hover:text-slate-950" aria-label={guardados.length ? `Consultar ${guardados.length} productos guardados` : 'Ver productos'}>
+            <a href={guardados.length ? wa(mensajeGuardados) : '#productos'} className="corte-sm relative grid h-11 w-11 shrink-0 place-items-center border border-white/25 bg-white/10 text-white transition hover:border-cyan-300 hover:text-cyan-300" aria-label={guardados.length ? `Consultar ${guardados.length} productos guardados` : 'Ver productos'}>
               <span aria-hidden="true">♡</span>
-              {guardados.length > 0 && <span className="tabular absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-cyan-300 px-1 text-[10px] font-black text-slate-950">{guardados.length}</span>}
+              {guardados.length > 0 && <span className="tabular absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center bg-rose-400 px-1 font-marcador text-[10px] font-bold text-slate-950">{guardados.length}</span>}
             </a>
             <MenuMovil
               enlaces={enlaces}
               activa={activa}
               cta={{ href: wa(mensajeGuardados), texto: 'Comprar por WhatsApp' }}
               tono={{
-                boton: 'rounded-full border border-slate-200 bg-white text-slate-950',
-                panel: 'border-slate-200 bg-white text-slate-950',
-                activo: 'text-cyan-700',
-                cta: 'rounded-full bg-cyan-300 text-slate-950',
+                boton: 'corte-sm border border-white/25 bg-white/10 text-white',
+                panel: 'border-cyan-300/30 bg-slate-950 text-white',
+                activo: 'text-cyan-300',
+                cta: 'corte-sm bg-cyan-300 text-slate-950',
               }}
             />
           </div>
@@ -237,67 +273,74 @@ function App() {
           <img
             src="/img/foto-15176497639620.jpg"
             alt="Atletas entrenando en una pista deportiva"
-            className="absolute inset-0 -z-20 h-full w-full object-cover opacity-35"
+            className="absolute inset-0 -z-20 h-full w-full object-cover opacity-40"
           />
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_74%_18%,rgba(34,211,238,.42),transparent_26%),linear-gradient(115deg,#020617_0%,rgba(2,6,23,.96)_42%,rgba(15,23,42,.42)_100%)]" />
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#f4f7fb] to-transparent" />
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(100deg,#020617_0%,rgba(2,6,23,.95)_48%,rgba(2,6,23,.45)_100%)]" />
+          <span className="velocidad en-desfile absolute -right-24 top-0 -z-10 h-full w-2/3 text-cyan-300 opacity-[0.08]" aria-hidden="true" />
 
-          <div className="mx-auto grid min-h-[720px] max-w-7xl items-center gap-12 px-5 py-16 lg:grid-cols-[1.02fr_.98fr] lg:px-8">
-            <div className="max-w-3xl pt-8 text-white">
-              <div className="mb-7 inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-cyan-200 backdrop-blur">
-                Nueva colección 2026 · Venezuela
-              </div>
-              <h1 className="text-6xl font-black uppercase italic leading-[0.88] tracking-[-0.01em] sm:text-7xl lg:text-[6.5rem]">
-                Equipo original para entrenar en serio
-              </h1>
-              <p className="mt-7 max-w-2xl text-lg leading-8 text-white/70 sm:text-xl">
-                Calzado, ropa técnica y accesorios originales. Te ayudamos a elegir la talla por WhatsApp antes de pagar y te lo enviamos a toda Venezuela.
-              </p>
-              <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                <a href="#productos" className="inline-flex items-center justify-center rounded-full bg-cyan-300 px-8 py-4 text-base font-black text-slate-950 shadow-2xl shadow-cyan-400/20 transition hover:-translate-y-0.5 hover:bg-white">
-                  Ver productos destacados
-                </a>
-                <a href={wa('Hola, quiero asesoría para elegir mi equipo.')} className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 px-8 py-4 text-base font-black text-white backdrop-blur transition hover:bg-white/15">
-                  Pedir asesoría por WhatsApp
-                </a>
-              </div>
-
-              <div className="mt-12 grid max-w-xl grid-cols-3 overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 backdrop-blur-xl">
-                {[
-                  ['500+', 'productos'],
-                  ['24h', 'despacho'],
-                  ['4.9★', 'valoración'],
-                ].map(([value, label]) => (
-                  <div key={label} className="border-r border-white/10 p-5 last:border-r-0">
-                    <strong className="block text-2xl font-black">{value}</strong>
-                    <span className="text-[11px] font-black uppercase tracking-wide text-white/45">{label}</span>
-                  </div>
-                ))}
-              </div>
+          <div className="mx-auto max-w-7xl px-5 pb-20 pt-16 md:pb-24 md:pt-20 lg:px-8">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+              <span className="corte-sm flex items-center gap-2 border border-rose-400/50 bg-rose-500/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.2em] text-rose-300">
+                <span className="latido h-1.5 w-1.5 rounded-full bg-rose-400" aria-hidden="true" />
+                En vivo
+              </span>
+              <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-white/75">Temporada 2026 · Punto Fijo, Falcón</span>
             </div>
 
-            <div className="relative hidden min-h-[560px] lg:block">
-              <div className="absolute right-0 top-8 w-[22rem] rotate-2 rounded-[2rem] border border-white/10 bg-white/10 p-4 shadow-2xl shadow-black/30 backdrop-blur-xl">
-                <img
-                  src="/img/foto-15422910267eec.jpg"
-                  alt="Zapatos running rojos"
-                  className="h-72 w-full rounded-[1.5rem] object-cover"
-                />
-                <div className="p-4 text-white">
-                  <div className="mb-2 flex items-center justify-between text-xs font-black uppercase tracking-wide text-cyan-200">
-                    <span>Drop recomendado</span>
-                    <span>4.9 ★</span>
-                  </div>
-                  <h2 className="text-2xl font-black tracking-tight">AeroPulse Runner Pro</h2>
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="text-3xl font-black">$89</span>
-                    <span className="rounded-full bg-cyan-300 px-3 py-1 text-xs font-black text-slate-950">-20%</span>
-                  </div>
+            <h1 className="mt-8 max-w-5xl text-6xl font-black uppercase leading-[0.86] tracking-[-0.02em] text-white sm:text-7xl lg:text-[7rem]">
+              Equipo original para entrenar <span className="text-cyan-300">en serio</span>
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg leading-8 text-white/80 sm:text-xl">
+              Calzado, ropa técnica y accesorios originales. Te ayudamos a elegir la talla por WhatsApp antes de pagar y te lo enviamos a toda Venezuela.
+            </p>
+
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+              <a href="#productos" className="corte inline-flex items-center justify-center bg-cyan-300 px-8 py-4 font-display text-lg font-black uppercase tracking-wide text-slate-950 shadow-2xl shadow-cyan-400/20 transition hover:-translate-y-0.5 hover:bg-white">
+                Ver productos destacados
+              </a>
+              <a href={wa('Hola, quiero asesoría para elegir mi equipo.')} className="corte inline-flex items-center justify-center border border-white/25 bg-white/10 px-8 py-4 font-display text-lg font-black uppercase tracking-wide text-white backdrop-blur transition hover:bg-white/15">
+                Pedir asesoría por WhatsApp
+              </a>
+            </div>
+
+            <div className="tabular corte mt-12 grid max-w-4xl grid-cols-2 gap-px border border-white/15 bg-white/15 md:grid-cols-4">
+              {marcador.map(([valor, etiqueta]) => (
+                <div key={etiqueta} className="bg-slate-950/85 px-5 py-5 backdrop-blur">
+                  <strong className="block font-marcador text-4xl font-bold leading-none text-cyan-300 md:text-5xl">{valor}</strong>
+                  <span className="mt-2 block text-[10px] font-bold uppercase tracking-[0.16em] text-white/75">{etiqueta}</span>
                 </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section aria-label="Producto de la jornada" className="relative isolate overflow-hidden border-y border-cyan-300/25 bg-[#06121c] text-white">
+          <span className="velocidad en-desfile absolute inset-0 text-cyan-300 opacity-[0.07]" aria-hidden="true" />
+          <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-5 py-12 lg:grid-cols-[minmax(0,20rem)_1fr] lg:px-8">
+            <img
+              src="/img/foto-15422910267eec.jpg"
+              alt="Zapatos running rojos AeroPulse Runner Pro"
+              className="corte h-52 w-full object-cover lg:h-60"
+            />
+            <div>
+              <div className="flex flex-wrap items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em]">
+                <span className="corte-sm border border-cyan-300/50 bg-cyan-300/10 px-3 py-1.5 text-cyan-200">Producto de la jornada</span>
+                <span className="tabular font-marcador text-white/80">MIN 20'</span>
               </div>
-              <div className="absolute left-0 top-24 max-w-[16rem] -rotate-2 rounded-[2rem] border border-white/10 bg-slate-950/80 p-6 text-white shadow-2xl backdrop-blur-xl">
-                <p className="text-sm font-semibold leading-6 text-white/68">Confirma talla, disponibilidad y envío con un asesor antes de comprar. Respondemos en minutos.</p>
-                <a href={wa('Hola, quiero hablar con un asesor.')} className="mt-5 inline-flex rounded-full bg-white px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-200">
+              <h2 className="mt-4 text-4xl font-black uppercase leading-none tracking-tight sm:text-5xl">AeroPulse Runner Pro</h2>
+              <div className="tabular mt-4 flex flex-wrap items-baseline gap-4">
+                <span className="font-marcador text-4xl font-bold text-cyan-300">$89</span>
+                <span className="font-marcador text-lg text-white/70 line-through">$110</span>
+                <span className="corte-sm bg-amber-300 px-3 py-1 text-xs font-black text-slate-950">-20%</span>
+              </div>
+              <p className="mt-4 max-w-xl text-base leading-7 text-white/75">
+                Confirma talla, disponibilidad y envío con un asesor antes de comprar. Respondemos en minutos.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a href={wa('Hola, quiero comprar AeroPulse Runner Pro ($89). ¿Qué tallas tienen disponibles?')} className="corte-sm bg-cyan-300 px-6 py-3 font-display text-base font-black uppercase tracking-wide text-slate-950 transition hover:bg-white">
+                  Comprar
+                </a>
+                <a href={wa('Hola, quiero hablar con un asesor.')} className="corte-sm border border-white/30 px-6 py-3 font-display text-base font-black uppercase tracking-wide text-white transition hover:border-cyan-300 hover:text-cyan-300">
                   Hablar con asesor
                 </a>
               </div>
@@ -305,34 +348,40 @@ function App() {
           </div>
         </section>
 
+        <DivisorCancha />
+
         <section id="categorias" className="py-24">
           <div className="mx-auto max-w-7xl px-5 lg:px-8">
             <div className="mb-12 flex flex-col justify-between gap-5 md:flex-row md:items-end">
               <div>
-                <p className="text-sm font-black uppercase tracking-[0.22em] text-cyan-700">Compra por disciplina</p>
-                <h2 className="mt-3 max-w-3xl text-5xl font-black uppercase italic leading-[0.95] sm:text-6xl">Elige tu disciplina</h2>
+                <p className="corte-sm inline-block bg-slate-950 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-cyan-300">Plantilla oficial</p>
+                <h2 className="mt-4 max-w-3xl text-5xl font-black uppercase leading-[0.95] sm:text-6xl">Elige tu disciplina</h2>
               </div>
-              <p className="max-w-md text-base leading-7 text-slate-500">Running, gimnasio, cancha o tabla: cada línea con lo que de verdad se usa en cada deporte.</p>
+              <p className="max-w-md text-base leading-7 text-slate-600">Running, gimnasio, cancha o tabla: cada línea con lo que de verdad se usa en cada deporte.</p>
             </div>
 
             <div className="grid gap-5 md:grid-cols-4">
-              {categories.map((cat) => (
+              {categories.map((cat, indice) => (
                 <a
                   key={cat.name}
                   href="#productos"
-                  className={`group relative overflow-hidden rounded-[2rem] bg-slate-950 shadow-sm ${cat.size}`}
+                  className={`corte group relative overflow-hidden bg-slate-950 shadow-sm ${cat.size}`}
                   onClick={() => setActiveFilter(cat.name)}
                 >
-                  <img src={cat.img} alt={cat.name} className="absolute inset-0 h-full w-full object-cover opacity-82 transition duration-700 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/25 to-transparent" />
-                  <div className="absolute left-5 top-5 rounded-full bg-white/12 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-white/75 backdrop-blur">
+                  <img src={cat.img} alt={`Categoría ${cat.name}`} className="absolute inset-0 h-full w-full object-cover opacity-80 transition duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-slate-950/40" />
+                  <span className="velocidad absolute inset-x-0 top-0 h-16 text-cyan-300 opacity-40" aria-hidden="true" />
+                  <span className="tabular absolute right-5 top-3 font-marcador text-5xl font-bold text-white/30" aria-hidden="true">
+                    {String(indice + 1).padStart(2, '0')}
+                  </span>
+                  <span className="corte-sm absolute left-5 top-5 bg-slate-950/80 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-white/85 backdrop-blur">
                     {cat.stat}
-                  </div>
+                  </span>
                   <div className="absolute inset-x-0 bottom-0 p-6 text-white">
                     <p className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-cyan-200">{cat.eyebrow}</p>
                     <div className="flex items-end justify-between gap-5">
-                      <h3 className="text-3xl font-black tracking-tight">{cat.name}</h3>
-                      <span className="rounded-full bg-white/15 px-4 py-2 text-xs font-black backdrop-blur transition group-hover:bg-cyan-300 group-hover:text-slate-950">Explorar</span>
+                      <h3 className="text-3xl font-black uppercase tracking-tight">{cat.name}</h3>
+                      <span className="corte-sm bg-cyan-300 px-4 py-2 text-xs font-black uppercase text-slate-950 transition group-hover:bg-white">Ver ficha</span>
                     </div>
                   </div>
                 </a>
@@ -341,20 +390,21 @@ function App() {
           </div>
         </section>
 
-        <section id="productos" className="bg-white py-24">
-          <div className="mx-auto max-w-7xl px-5 lg:px-8">
+        <section id="productos" className="relative overflow-hidden border-y border-slate-950/10 bg-white py-24">
+          <span className="velocidad absolute inset-x-0 top-0 h-20 text-slate-950 opacity-[0.05]" aria-hidden="true" />
+          <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
             <div className="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end">
               <div>
-                <p className="text-sm font-black uppercase tracking-[0.22em] text-cyan-700">Catálogo destacado</p>
-                <h2 className="mt-3 text-5xl font-black uppercase italic leading-[0.95] sm:text-6xl">Productos listos para comprar</h2>
+                <p className="corte-sm inline-block bg-slate-950 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-cyan-300">Catálogo destacado</p>
+                <h2 className="mt-4 text-5xl font-black uppercase leading-[0.95] sm:text-6xl">Productos listos para comprar</h2>
                 {busqueda.trim() && (
-                  <p className="mt-3 text-sm font-semibold text-slate-500">
+                  <p className="mt-3 text-sm font-semibold text-slate-600">
                     Resultados para «{busqueda.trim()}» ·{' '}
                     <button type="button" onClick={() => setBusqueda('')} className="font-black text-cyan-700 underline underline-offset-4">ver todo</button>
                   </p>
                 )}
               </div>
-              <a href={wa('Hola, ¿me pueden enviar el catálogo completo?')} className="inline-flex w-fit rounded-full bg-slate-950 px-6 py-3 text-sm font-black text-white transition hover:bg-cyan-500 hover:text-slate-950">
+              <a href={wa('Hola, ¿me pueden enviar el catálogo completo?')} className="corte-sm inline-flex w-fit bg-slate-950 px-6 py-3 font-display text-base font-black uppercase tracking-wide text-white transition hover:bg-cyan-500 hover:text-slate-950">
                 Pedir catálogo completo
               </a>
             </div>
@@ -365,8 +415,8 @@ function App() {
                 value={busqueda}
                 onChange={(event) => setBusqueda(event.target.value)}
                 aria-label="Buscar productos"
-                placeholder="⌕  Buscar zapatos, ropa, accesorios..."
-                className="w-full rounded-full border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold outline-none transition placeholder:text-slate-400 focus:border-cyan-400 focus:bg-white"
+                placeholder="Buscar zapatos, ropa, accesorios..."
+                className="w-full border border-slate-300 bg-slate-50 px-5 py-3 text-sm font-semibold outline-none transition focus:border-cyan-600 focus:bg-white"
               />
             </form>
             <div className="mb-10 flex gap-3 overflow-x-auto pb-2" role="group" aria-label="Filtrar por disciplina">
@@ -376,7 +426,7 @@ function App() {
                   type="button"
                   aria-pressed={activeFilter === filter}
                   onClick={() => setActiveFilter(filter)}
-                  className={`shrink-0 rounded-full border px-5 py-2.5 text-sm font-black transition ${activeFilter === filter ? 'border-slate-950 bg-slate-950 text-white' : 'border-slate-200 bg-white text-slate-500 hover:border-cyan-400 hover:text-cyan-700'}`}
+                  className={`corte-sm shrink-0 border px-5 py-2.5 font-display text-base font-black uppercase tracking-wide transition ${activeFilter === filter ? 'border-slate-950 bg-slate-950 text-cyan-300' : 'border-slate-300 bg-white text-slate-600 hover:border-cyan-600 hover:text-cyan-700'}`}
                 >
                   {filter}
                 </button>
@@ -384,19 +434,20 @@ function App() {
             </div>
 
             {filteredProducts.length === 0 && (
-              <div className="rounded-[2rem] border border-dashed border-slate-300 bg-slate-50 px-6 py-14 text-center">
-                <p className="text-3xl font-black uppercase italic">No lo tenemos en vitrina</p>
-                <p className="mx-auto mt-3 max-w-md text-sm font-semibold text-slate-500">Pregúntanos igual: traemos modelos por encargo en 5 a 7 días.</p>
-                <a href={wa(`Hola, busco: ${busqueda.trim()}. ¿Lo pueden conseguir?`)} className="mt-6 inline-flex rounded-full bg-slate-950 px-6 py-3 text-sm font-black text-white transition hover:bg-cyan-500 hover:text-slate-950">Preguntar por WhatsApp</a>
+              <div className="corte border border-dashed border-slate-400 bg-slate-50 px-6 py-14 text-center">
+                <p className="text-3xl font-black uppercase">No lo tenemos en vitrina</p>
+                <p className="mx-auto mt-3 max-w-md text-sm font-semibold text-slate-600">Pregúntanos igual: traemos modelos por encargo en 5 a 7 días.</p>
+                <a href={wa(`Hola, busco: ${busqueda.trim()}. ¿Lo pueden conseguir?`)} className="corte-sm mt-6 inline-flex bg-slate-950 px-6 py-3 text-sm font-black text-white transition hover:bg-cyan-500 hover:text-slate-950">Preguntar por WhatsApp</a>
               </div>
             )}
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {filteredProducts.map((product) => (
-                <article key={product.name} className="group flex flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:border-cyan-200 hover:shadow-2xl hover:shadow-slate-950/10">
+                <article key={product.name} className="corte group flex flex-col overflow-hidden border border-slate-300 bg-white transition hover:-translate-y-1 hover:border-cyan-600 hover:shadow-2xl hover:shadow-slate-950/15">
                   <div className="relative aspect-square overflow-hidden bg-slate-100">
                     <img src={product.img} alt={product.name} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                    <span className="velocidad absolute inset-x-0 bottom-0 h-12 text-slate-950 opacity-0 transition group-hover:opacity-20" aria-hidden="true" />
                     {product.tag && (
-                      <span className={`absolute left-4 top-4 rounded-full px-3 py-1.5 text-xs font-black ${product.tag.includes('%') ? 'bg-orange-300 text-slate-950' : 'bg-cyan-300 text-slate-950'}`}>
+                      <span className={`corte-sm absolute left-4 top-4 px-3 py-1.5 text-xs font-black ${product.tag.includes('%') ? 'bg-amber-300 text-slate-950' : 'bg-cyan-300 text-slate-950'}`}>
                         {product.tag}
                       </span>
                     )}
@@ -404,24 +455,24 @@ function App() {
                       type="button"
                       onClick={() => alternarGuardado(product.name)}
                       aria-pressed={guardados.includes(product.name)}
-                      className={`absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full shadow-sm backdrop-blur transition active:scale-90 ${guardados.includes(product.name) ? 'bg-slate-950 text-cyan-300' : 'bg-white/90 text-slate-950 hover:bg-slate-950 hover:text-white'}`}
+                      className={`corte-sm absolute right-4 top-4 grid h-10 w-10 place-items-center shadow-sm backdrop-blur transition active:scale-90 ${guardados.includes(product.name) ? 'bg-slate-950 text-cyan-300' : 'bg-white/90 text-slate-950 hover:bg-slate-950 hover:text-white'}`}
                       aria-label={`Guardar ${product.name}`}
                     >
                       {guardados.includes(product.name) ? '♥' : '♡'}
                     </button>
                   </div>
                   <div className="flex flex-1 flex-col p-5">
-                    <div className="mb-3 flex items-center justify-between gap-3 text-xs font-black uppercase tracking-wide text-slate-400">
-                      <span>{product.category}</span>
-                      <span className="text-amber-500">★ {product.rating}</span>
+                    <div className="mb-3 flex items-center justify-between gap-3 text-xs font-black uppercase tracking-wide text-slate-500">
+                      <span className="corte-sm bg-slate-100 px-2 py-1">{product.category}</span>
+                      <span className="text-amber-700">★ {product.rating}</span>
                     </div>
                     <h3 className="text-2xl font-extrabold uppercase leading-7">{product.name}</h3>
-                    <div className="mt-auto flex items-end justify-between gap-4 pt-5">
-                      <div className="tabular">
-                        <span className="text-3xl font-black">${product.price}</span>
-                        {product.oldPrice && <span className="ml-2 text-sm font-bold text-slate-400 line-through">${product.oldPrice}</span>}
+                    <div className="tabular mt-auto flex items-end justify-between gap-4 pt-5">
+                      <div className="font-marcador">
+                        <span className="text-3xl font-bold">${product.price}</span>
+                        {product.oldPrice && <span className="ml-2 text-sm font-semibold text-slate-500 line-through">${product.oldPrice}</span>}
                       </div>
-                      <a href={wa(`Hola, quiero comprar ${product.name} ($${product.price}). ¿Qué tallas tienen disponibles?`)} aria-label={`Comprar ${product.name}`} className="rounded-full bg-cyan-300 px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-slate-950 hover:text-white active:scale-95">
+                      <a href={wa(`Hola, quiero comprar ${product.name} ($${product.price}). ¿Qué tallas tienen disponibles?`)} aria-label={`Comprar ${product.name}`} className="corte-sm bg-cyan-300 px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-slate-950 hover:text-white active:scale-95">
                         Comprar
                       </a>
                     </div>
@@ -432,36 +483,59 @@ function App() {
           </div>
         </section>
 
-        <section aria-label="Garantías" className="bg-slate-950 text-white">
-          <div className="mx-auto grid max-w-7xl gap-4 px-5 py-20 md:grid-cols-3 lg:px-8">
-            {benefits.map((benefit) => (
-              <div key={benefit.title} className="rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-7 backdrop-blur transition hover:border-cyan-300/50 hover:bg-white/[0.07]">
-                <span className="tabular mb-8 block font-[family-name:var(--font-display)] text-5xl font-black italic text-cyan-300">{benefit.value}</span>
-                <h3 className="text-xl font-black tracking-tight">{benefit.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-white/55">{benefit.desc}</p>
+        <section aria-label="Garantías" className="relative isolate overflow-hidden bg-slate-950 text-white">
+          <span className="velocidad en-desfile absolute inset-0 text-cyan-300 opacity-[0.08]" aria-hidden="true" />
+          <div className="relative mx-auto grid max-w-7xl gap-4 px-5 py-20 md:grid-cols-3 lg:px-8">
+            {benefits.map((benefit, indice) => (
+              <div key={benefit.title} className="corte border border-white/15 bg-slate-950/70 p-7 backdrop-blur transition hover:border-cyan-300/60">
+                <div className="mb-8 flex items-start justify-between gap-4">
+                  <span className="tabular font-marcador text-5xl font-bold leading-none text-cyan-300">{benefit.value}</span>
+                  <span className="tabular font-marcador text-sm font-bold text-white/60">{String(indice + 1).padStart(2, '0')} / 03</span>
+                </div>
+                <h3 className="text-xl font-black uppercase tracking-tight">{benefit.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-white/75">{benefit.desc}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section id="ofertas" className="relative overflow-hidden bg-white py-24">
-          <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-200/40 blur-3xl" />
-          <div className="mx-auto max-w-7xl px-5 lg:px-8">
+          <span className="velocidad absolute inset-x-0 top-0 h-24 text-slate-950 opacity-[0.05]" aria-hidden="true" />
+          <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
             <div className="mx-auto mb-12 max-w-3xl text-center">
-              <p className="text-sm font-black uppercase tracking-[0.22em] text-orange-500">Ofertas activas</p>
-              <h2 className="mt-3 text-5xl font-black uppercase italic leading-[0.95] sm:text-6xl">Cupones de esta semana</h2>
-              <p className="mt-5 text-lg leading-8 text-slate-500">Dile el código al asesor por WhatsApp y te lo aplica al confirmar tu compra.</p>
+              <p className="corte-sm inline-block bg-slate-950 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-cyan-300">Marcador de la semana</p>
+              <h2 className="mt-4 text-5xl font-black uppercase leading-[0.95] sm:text-6xl">Cupones de esta semana</h2>
+              <p className="mt-5 text-lg leading-8 text-slate-600">Dile el código al asesor por WhatsApp y te lo aplica al confirmar tu compra.</p>
             </div>
 
             <div className="grid gap-6 md:grid-cols-3">
               {promos.map((promo) => (
-                <article key={promo.code} className="relative overflow-hidden rounded-[2rem] bg-slate-950 p-7 text-white shadow-2xl shadow-slate-950/10">
-                  <div className={`absolute -right-12 -top-12 h-44 w-44 rounded-full bg-gradient-to-br ${promo.accent} opacity-70 blur-2xl`} />
-                  <div className="relative">
-                    <span className="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white/70">{promo.title}</span>
-                    <h3 className="tabular mt-8 text-5xl font-black italic tracking-wide">{promo.code}</h3>
-                    <p className="mt-4 min-h-14 text-base leading-7 text-white/60">{promo.desc}</p>
-                    <a href={wa(`Hola, quiero usar el cupón ${promo.code}.`)} className="mt-8 inline-flex rounded-full bg-white px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-200">
+                <article key={promo.code} className="corte relative overflow-hidden bg-slate-950 text-white shadow-2xl shadow-slate-950/20">
+                  <div className={`absolute -right-12 -top-12 h-44 w-44 rounded-full bg-gradient-to-br ${promo.accent} blur-2xl`} aria-hidden="true" />
+                  <div className="relative flex items-center justify-between border-b border-white/15 bg-white/[0.07] px-5 py-3 text-[11px] font-black uppercase tracking-[0.18em]">
+                    <span className="flex items-center gap-2 text-cyan-200">
+                      <span className="latido h-1.5 w-1.5 rounded-full bg-cyan-300" aria-hidden="true" />
+                      En curso
+                    </span>
+                    <span className="tabular font-marcador text-white/85">MIN {promo.minuto}</span>
+                  </div>
+                  <div className="relative flex items-end justify-between gap-4 px-5 pt-6">
+                    <div>
+                      <p className="text-[11px] font-black uppercase tracking-[0.2em] text-white/75">{promo.title}</p>
+                      <h3 className="mt-1 font-marcador text-3xl font-bold tracking-tight text-cyan-300">{promo.code}</h3>
+                    </div>
+                    <div className="text-right">
+                      <p className="tabular font-marcador text-5xl font-bold leading-none">
+                        <span>{promo.score[0]}</span>
+                        <span className="text-white/65">-</span>
+                        <span className="text-white/75">{promo.score[1]}</span>
+                      </p>
+                      <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white/75">{promo.unidad}</p>
+                    </div>
+                  </div>
+                  <p className="relative mt-4 min-h-14 px-5 text-base leading-7 text-white/80">{promo.desc}</p>
+                  <div className="relative mt-4 pb-6 px-5">
+                    <a href={wa(`Hola, quiero usar el cupón ${promo.code}.`)} className="corte-sm inline-flex bg-cyan-300 px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-white">
                       Usar cupón
                     </a>
                   </div>
@@ -472,19 +546,23 @@ function App() {
         </section>
 
         <section id="club" className="bg-[#f4f7fb] px-5 py-24 lg:px-8">
-          <div className="mx-auto grid max-w-7xl overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 text-white shadow-2xl shadow-slate-950/20 lg:grid-cols-[1.08fr_.92fr]">
-            <div className="p-8 sm:p-12 lg:p-16">
-              <p className="text-sm font-black uppercase tracking-[0.24em] text-cyan-200">Club SportZone</p>
-              <h2 className="mt-4 max-w-2xl text-5xl font-black uppercase italic leading-[0.95] sm:text-6xl">Entra al Club SportZone</h2>
-              <p className="mt-6 max-w-xl text-lg leading-8 text-white/70">Te avisamos primero cuando llegan modelos nuevos y te guardamos tu talla. Un correo al mes, sin relleno.</p>
+          <div className="corte mx-auto grid max-w-7xl overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 text-white shadow-2xl shadow-slate-950/25 lg:grid-cols-[1.08fr_.92fr]">
+            <div className="relative isolate p-8 sm:p-12 lg:p-16">
+              <span className="velocidad absolute inset-x-0 top-0 h-14 text-cyan-300 opacity-20" aria-hidden="true" />
+              <div className="relative flex flex-wrap items-center gap-3">
+                <span className="corte-sm bg-cyan-300 px-4 py-2 text-xs font-black uppercase tracking-[0.2em] text-slate-950">Club SportZone</span>
+                <span className="tabular font-marcador text-xs font-bold text-white/75">INSCRIPCIÓN 01 / 02</span>
+              </div>
+              <h2 className="relative mt-5 max-w-2xl text-5xl font-black uppercase leading-[0.95] sm:text-6xl">Entra al Club SportZone</h2>
+              <p className="relative mt-6 max-w-xl text-lg leading-8 text-white/80">Te avisamos primero cuando llegan modelos nuevos y te guardamos tu talla. Un correo al mes, sin relleno.</p>
               {club === 'listo' ? (
-                <div className="mt-9 rounded-[1.5rem] border border-cyan-300/40 bg-cyan-300/10 p-6" role="status">
+                <div className="corte-sm relative mt-9 border border-cyan-300/50 bg-cyan-300/10 p-6" role="status">
                   <p className="text-lg font-black">Falta un paso: confírmalo por WhatsApp.</p>
-                  <p className="mt-2 text-sm text-white/65">Así te guardamos la talla y te avisamos de los modelos nuevos en {correo.trim()}.</p>
-                  <a href={wa(`Hola, quiero entrar al Club SportZone. Mi correo es ${correo.trim()}.`)} className="mt-5 inline-flex rounded-full bg-cyan-300 px-6 py-3 text-sm font-black text-slate-950 transition hover:bg-white">Confirmar por WhatsApp</a>
+                  <p className="mt-2 text-sm text-white/80">Así te guardamos la talla y te avisamos de los modelos nuevos en {correo.trim()}.</p>
+                  <a href={wa(`Hola, quiero entrar al Club SportZone. Mi correo es ${correo.trim()}.`)} className="corte-sm mt-5 inline-flex bg-cyan-300 px-6 py-3 text-sm font-black text-slate-950 transition hover:bg-white">Confirmar por WhatsApp</a>
                 </div>
               ) : (
-                <form onSubmit={unirse} noValidate className="mt-9">
+                <form onSubmit={unirse} noValidate className="relative mt-9">
                   <div className="flex flex-col gap-3 sm:flex-row">
                     <input
                       type="email"
@@ -498,9 +576,9 @@ function App() {
                       aria-invalid={club === 'error'}
                       aria-describedby="club-error"
                       autoComplete="email"
-                      className={`min-h-14 flex-1 rounded-full border bg-white/10 px-6 text-white outline-none placeholder:text-white/50 focus:border-cyan-200 ${club === 'error' ? 'border-orange-300' : 'border-white/15'}`}
+                      className={`min-h-14 flex-1 border bg-white/10 px-6 text-white outline-none placeholder:text-white/70 focus:border-cyan-200 ${club === 'error' ? 'border-orange-300' : 'border-white/25'}`}
                     />
-                    <button className="min-h-14 rounded-full bg-cyan-300 px-8 text-sm font-black text-slate-950 transition hover:bg-white active:scale-[.98]">Unirme</button>
+                    <button className="corte-sm min-h-14 bg-cyan-300 px-8 font-display text-base font-black uppercase tracking-wide text-slate-950 transition hover:bg-white active:scale-[.98]">Unirme</button>
                   </div>
                   <p id="club-error" className="mt-3 min-h-5 pl-6 text-sm font-semibold text-orange-200">{club === 'error' ? 'Revisa el correo: debe tener la forma nombre@dominio.com.' : ''}</p>
                 </form>
@@ -509,7 +587,8 @@ function App() {
             <div className="relative min-h-[360px] bg-slate-950">
               <img src="/img/foto-15186110121186.jpg" alt="Persona entrenando con ropa deportiva" className="absolute inset-0 h-full w-full object-cover opacity-70" />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 to-transparent" />
-              <a href={wa(mensajeGuardados)} className="absolute bottom-8 left-8 right-8 rounded-full bg-cyan-300 px-6 py-4 text-center text-sm font-black text-slate-950 transition hover:bg-white">
+              <span className="velocidad absolute inset-x-0 bottom-0 h-24 text-cyan-300 opacity-25" aria-hidden="true" />
+              <a href={wa(mensajeGuardados)} className="corte-sm absolute bottom-8 left-8 right-8 bg-cyan-300 px-6 py-4 text-center font-display text-lg font-black uppercase tracking-wide text-slate-950 transition hover:bg-white">
                 Comprar por WhatsApp
               </a>
             </div>
@@ -517,42 +596,42 @@ function App() {
         </section>
       </main>
 
-      <footer className="border-t border-slate-200 bg-white py-14">
-        <div className="mx-auto grid max-w-7xl gap-10 px-5 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
+      <footer className="border-t border-cyan-300/30 bg-slate-950 py-14 text-white">
+        <div className="relative mx-auto grid max-w-7xl gap-10 px-5 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
           <div>
             <div className="flex items-center gap-3">
-              <span className="grid h-11 w-11 place-items-center rounded-2xl bg-slate-950 text-sm font-black text-cyan-300">SZ</span>
+              <span className="grid h-11 w-11 place-items-center bg-cyan-300 font-marcador text-sm font-bold text-slate-950">SZ</span>
               <div>
-                <span className="block text-lg font-black">SportZone Pro</span>
-                <span className="text-xs font-semibold text-slate-500">Performance store</span>
+                <span className="block text-lg font-black uppercase">SportZone Pro</span>
+                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">Performance store</span>
               </div>
             </div>
-            <p className="mt-5 max-w-md text-sm leading-6 text-slate-500">Calzado, ropa técnica y accesorios originales con asesoría de talla por WhatsApp y envíos a toda Venezuela.</p>
+            <p className="mt-5 max-w-md text-sm leading-6 text-white/75">Calzado, ropa técnica y accesorios originales con asesoría de talla por WhatsApp y envíos a toda Venezuela.</p>
           </div>
           <div>
-            <h3 className="text-sm font-black uppercase tracking-wide">Categorías</h3>
-            <ul className="mt-5 space-y-3 text-sm font-semibold text-slate-500">
-              <li><a href="#categorias" className="hover:text-cyan-700">Running</a></li>
-              <li><a href="#categorias" className="hover:text-cyan-700">Training</a></li>
-              <li><a href="#categorias" className="hover:text-cyan-700">Fútbol</a></li>
-              <li><a href="#ofertas" className="hover:text-cyan-700">Ofertas</a></li>
+            <h3 className="text-sm font-black uppercase tracking-[0.18em] text-cyan-300">Categorías</h3>
+            <ul className="mt-5 space-y-3 text-sm font-semibold text-white/75">
+              <li><a href="#categorias" className="transition hover:text-cyan-300">Running</a></li>
+              <li><a href="#categorias" className="transition hover:text-cyan-300">Training</a></li>
+              <li><a href="#categorias" className="transition hover:text-cyan-300">Fútbol</a></li>
+              <li><a href="#ofertas" className="transition hover:text-cyan-300">Ofertas</a></li>
             </ul>
           </div>
           <div>
-            <h3 className="text-sm font-black uppercase tracking-wide">Contacto</h3>
-            <ul className="mt-5 space-y-3 text-sm font-semibold text-slate-500">
+            <h3 className="text-sm font-black uppercase tracking-[0.18em] text-cyan-300">Contacto</h3>
+            <ul className="mt-5 space-y-3 text-sm font-semibold text-white/75">
               <li>Punto Fijo, Falcón</li>
-              <li><a href={wa()} className="hover:text-cyan-700">WhatsApp: +58 412-000-0000</a></li>
+              <li><a href={wa()} className="transition hover:text-cyan-300">WhatsApp: +58 412-000-0000</a></li>
               <li>Atención: 9:00 AM - 7:00 PM</li>
             </ul>
           </div>
         </div>
-        <div className="mx-auto mt-12 max-w-7xl border-t border-slate-200 px-5 pt-7 text-center text-xs font-semibold text-slate-400 lg:px-8">
+        <div className="mx-auto mt-12 max-w-7xl border-t border-white/15 px-5 pt-7 text-center text-xs font-semibold text-white/70 lg:px-8">
           © 2026 SportZone Pro. Demo creada por Carlos Avila - Developer 🇻🇪 ·{' '}
-          <a href="/privacidad/" className="underline underline-offset-2 hover:text-slate-700">Privacidad</a>
+          <a href="/privacidad/" className="underline underline-offset-2 transition hover:text-cyan-300">Privacidad</a>
         </div>
       </footer>
-      <WhatsAppFlotante texto={mensajeGuardados} className="bg-cyan-300 text-slate-950" />
+      <WhatsAppFlotante texto={mensajeGuardados} className="corte-sm bg-cyan-300 text-slate-950" />
     </div>
   )
 }

@@ -6,7 +6,7 @@ import { wa } from './navegacion.js'
 
 export function SaltarAlContenido({ className = '' }) {
   return (
-    <a href="#contenido" className={`sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:px-4 focus:py-2 focus:text-sm focus:font-bold ${className}`}>
+    <a href="#contenido" className={`saltar sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:px-4 focus:py-2 focus:text-sm focus:font-bold ${className}`}>
       Saltar al contenido
     </a>
   )
