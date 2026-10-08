@@ -2,19 +2,20 @@
 
 [Español](README.md) · [English](README.en.md)
 
-Demo landing page for a sporting goods store: categories, a filterable catalog, offers and advice by WhatsApp.
+Demo one-page website for a sporting goods store: categories, a filterable catalog, offers and advice by WhatsApp.
 
 **Live demo:** https://agencia-web-deportes-demo.vercel.app
 
-> This is a demonstration template by [Carlos Avila](https://github.com/AvilaCarlosDev). The business, prices and figures are made up. It is a starting point to adapt a landing page for a real client.
+> This is a demonstration template by [Carlos Avila](https://github.com/AvilaCarlosDev). The business, prices and figures are made up. It is a starting point for a real business website.
 
 ## What it includes
 
 - Responsive design (mobile, tablet and desktop) built with React and Tailwind.
-- Section navigation with anchors and WhatsApp contact buttons.
+- Section menu that also works on phones, with the visible section highlighted.
+- Catalog search, saved products you can ask about together, and a club form with email validation.
 - Complete SEO: canonical URL, Open Graph and Twitter cards with its own image, JSON-LD, `robots.txt`, `sitemap.xml`, web manifest, icons and a 404 page.
 - Security: HTTP headers and a strict CSP in `vercel.json`, `security.txt` and zero third-party resources (fonts are self-hosted with Fontsource).
-- Privacy: no cookies, forms or analytics; a [privacy policy](public/privacidad/index.html) linked from the footer (in Spanish).
+- Privacy: no cookies or analytics; whatever is typed into the fields never leaves the browser except inside the WhatsApp message; a [privacy policy](public/privacidad/index.html) linked from the footer (in Spanish).
 - Images are hosted inside the project (`public/img`), so the page never depends on external services.
 
 ## Tech
